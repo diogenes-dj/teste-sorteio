@@ -619,9 +619,12 @@
   </div>
 </div>
 
+<script src="playlist.js"></script>
+
 <script>
   let participants = [];
   let raffleSound = new Audio();
+  let playlist = window.PLAYLIST.songs;
 
   function addParticipant() {
     const nameEl = document.getElementById('input-name');
@@ -699,25 +702,21 @@
   }
 
   function loadSound() {
-    const songs = [
-        "audio/song1.mp3",
-        "audio/song2.mp3",
-        "audio/song3.mp3",
-        "audio/song4.mp3",
-        "audio/song5.mp3",
-        "audio/song6.mp3",
-        "audio/song7.mp3",
-        "audio/song8.mp3",
-        "audio/song9.mp3",
-        "audio/song10.mp3"
-      ];
+    if (!playlist.length) {
+      console.warn('Playlist vazia ou não carregada.');
+      return;
+    }
 
-      const randomIndex = Math.floor(Math.random() * songs.length);
+    const randomIndex = Math.floor(Math.random() * playlist.length);
+    const selected = playlist[randomIndex];
 
-      raffleSound = new Audio(songs[randomIndex]);
-      raffleSound.loop = true;
-      raffleSound.currentTime = 0;
+    raffleSound = new Audio("audio/" + selected.file);
+    raffleSound.loop = true;
+
+    raffleSound.addEventListener('loadedmetadata', () => {
+      raffleSound.currentTime = selected.start || 0;
       raffleSound.play();
+    });
   }
 
   function startRaffle() {
