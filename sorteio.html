@@ -1,0 +1,1385 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+
+<style>
+  
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap');
+   
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #F5A623;
+    --gold-light: #FFD580;
+    --dark: #1a1a2e;
+    --mid: #16213e;
+    --accent: #e94560;
+    --text: #f0f0f0;
+    --text-muted: #9a9abf;
+    --green: #2ecc71;
+    --radius: 12px;
+  }
+  
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #003A8F 0%, #005CA9 50%, #4DA6FF 100%);
+    /*background: linear-gradient(135deg, #000000 0%, #007aff 50%, #000000 100%);*/
+    
+    overflow-x: hidden;
+  }
+
+  #app {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    /*background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);*/
+    border-radius: 20px;
+    /*padding: 28px 28px 32px;*/
+    color: var(--text);
+    min-height: 600px;
+    min-width: 100vh;
+    position: relative;
+    overflow: hidden;
+    padding: 20px; /* Ajusta o padding para se adaptar */
+    min-height: auto; /* Permite que a altura do app seja ajustada automaticamente */
+  }
+
+  #app::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 0%, rgba(229,69,96,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 100%, rgba(245,166,35,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+
+  .header-center {
+    text-align: center;
+  }
+
+  .header-center h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(245,166,35,0.4);
+    line-height: 1;
+  }
+
+  .header-center p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-left {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .header-left img {
+    height: 100px;
+    border-radius: 5px;
+  }
+
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(245,166,35,0.4);
+    line-height: 1;
+  }
+
+  .header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .panel {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 16px;
+    height: 300px;
+  }
+
+  .panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .form-group { margin-bottom: 14px; }
+
+  .form-group label {
+    display: block;
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .form-group input {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus {
+    border-color: var(--gold);
+    background: rgba(245,166,35,0.08);
+  }
+
+  .form-group input::placeholder { color: rgba(255,255,255,0.25); }
+
+  .btn-add {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold), #e8941f);
+    border: none;
+    border-radius: 8px;
+    padding: 11px;
+    color: #1a1a2e;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn-add:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(245,166,35,0.4);
+  }
+
+  .btn-add:active { transform: scale(0.98); }
+
+  .participants-list {
+    max-height: 220px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(245,166,35,0.3) transparent;
+  }
+
+  .participant-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    margin-bottom: 7px;
+    animation: slideIn 0.3s ease;
+  }
+
+  .participants-collapsed {
+    max-height: 65px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .participants-collapsed.expanded {
+    max-height: 500px; /* large enough to show all */
+  }
+
+  .toggle-participants {
+    margin-top: 6px;
+    font-size: 11px;
+    background: none;
+    border: none;
+    color: var(--gold);
+    cursor: pointer;
+  }
+
+  .right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .p-name { font-size: 16px; font-weight: 500; }
+
+  .p-coupons {
+    background: rgba(245,166,35,0.2);
+    color: var(--gold);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .p-remove {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.25);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .p-remove:hover { color: var(--accent); }
+
+  .empty-state {
+    text-align: center;
+    font-size: 16px !important;
+    padding: 30px 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .total-coupons {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 12px;
+    text-align: right;
+  }
+
+  .total-coupons span { color: var(--gold); font-weight: 600; }
+
+  .raffle-section {
+    margin-top: 20px;
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+
+  .btn-raffle {
+    background: linear-gradient(135deg, var(--accent), #c0392b);
+    border: none;
+    border-radius: 10px;
+    padding: 14px 36px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .history-fab {
+  width: 44px;
+  height: 44px;
+
+  border-radius: 10px;
+
+  background: rgba(255,255,255,0.05);
+  border: 0px solid rgba(255,255,255,0.15);
+
+  color: var(--text);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: transform 0.15s, background 0.2s;
+}
+
+.history-fab:hover {
+  transform: translateY(-2px);
+  background: rgba(245,166,35,0.15);
+  border-color: var(--gold);
+}
+
+  .btn-raffle:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(233,69,96,0.45);
+  }
+
+  .btn-raffle:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ROULETTE OVERLAY */
+  #roulette-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,30,0.97);
+    border-radius: 20px;
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  #roulette-overlay.active { display: flex; }
+
+  .roulette-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 5px;
+    color: var(--gold);
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+.roulette-window {
+    width: 400px;  /* um pouco mais largo */
+    height: 400px; /* altura maior para mostrar mais itens */
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 2px solid rgba(245,166,35,0.4);
+}
+
+  .roulette-window::before,
+  .roulette-window::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 60px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .roulette-window::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(10,10,30,0.95), transparent);
+  }
+
+  .roulette-window::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(10,10,30,0.95), transparent);
+  }
+
+  .roulette-highlight {
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 54px;
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    background: rgba(245,166,35,0.1);
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  #roulette-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    will-change: transform;
+  }
+
+  .roulette-item {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    width: 100%;
+    text-align: center;
+    padding: 0 20px;
+    transition: color 0.1s;
+  }
+
+  .roulette-item.center { color: var(--gold); }
+
+  /* WINNER */
+  #winner-screen {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,30,0.98);
+    border-radius: 20px;
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+  }
+
+  #winner-screen.active { display: flex; }
+
+  .confetti-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 20px;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(560px) rotate(720deg); opacity: 0; }
+  }
+
+  .trophy {
+    font-size: 72px;
+    animation: trophyBounce 0.6s ease;
+    margin-bottom: 8px;
+  }
+
+  @keyframes trophyBounce {
+    0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+    60% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  .winner-label {
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    animation: fadeUp 0.5s 0.3s both;
+  }
+
+  .winner-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-shadow: 0 0 40px rgba(245,166,35,0.6);
+    animation: fadeUp 0.5s 0.5s both;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .winner-coupons {
+    font-size: 14px;
+    color: var(--text-muted);
+    animation: fadeUp 0.5s 0.7s both;
+    margin-bottom: 28px;
+  }
+
+  .winner-coupons strong { color: var(--gold-light); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .btn-reset {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    padding: 10px 28px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    animation: fadeUp 0.5s 1s both;
+  }
+
+  .btn-reset:hover { border-color: var(--gold); color: var(--gold); }
+
+  #error-msg {
+    font-size: 12px;
+    color: var(--accent);
+    margin-top: 8px;
+    min-height: 16px;
+  }
+
+  #winner-screen {
+    position: absolute; /* already in your code */
+  }
+
+  .btn-music {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+
+    width: auto;
+    min-width: unset;
+
+    line-height: 1;
+  }
+
+#confirm-modal {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(10,10,30,0.95);
+  border-radius: 20px;
+  backdrop-filter: blur(1px);
+  z-index: 1000;
+
+  align-items: center;
+  justify-content: center;
+}
+
+#confirm-modal.active {
+  display: flex;
+}
+
+.confirm-box {
+  font-family: 'DM Sans', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 24px;
+  width: 320px;
+  text-align: center;
+}
+
+.confirm-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.confirm-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-cancel {
+  flex: 1;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.btn-confirm {
+  flex: 1;
+  background: linear-gradient(135deg, var(--accent), #c0392b);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#history-modal {
+  font-family: 'DM Sans', sans-serif;
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(10,10,30,0.95);
+  border-radius: 20px;
+  z-index: 400;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+#history-modal.active {
+  display: flex;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  font-size: 13px;
+}
+
+.history-left {
+  min-width: 0;
+  text-align: left;
+  flex: 0 0 44%;
+  max-width: 45%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-right {
+  text-align: right;
+  opacity: 0.8;
+  font-size: 12px;
+  line-height: 1.4;
+  flex: 0 0 55%;
+  max-width: 55%;
+  overflow-wrap: break-word;
+}
+
+.history-item strong {
+  color: var(--gold);
+}
+
+.history-box {
+  width: 450px;
+  height: 670px;
+  display: flex;
+  flex-direction: column;
+}
+
+#history-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  scrollbar-gutter: stable;
+}
+
+/* Footer layout */
+.history-footer {
+  /*border-top: 1px solid rgba(255,255,255,0.08);*/
+  flex-shrink: 0;
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+#history-pagination {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  justify-content: flex-start;
+}
+
+#history-pagination button {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+#history-list {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(245,166,35,0.4) rgba(255,255,255,0.03);
+}
+
+/* Chrome, Edge, Safari */
+#history-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+#history-list::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+}
+
+#history-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(245,166,35,0.6), rgba(233,69,96,0.4));
+  border-radius: 10px;
+  border: 2px solid rgba(10,10,30,0.6);
+}
+
+#history-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(245,166,35,0.9), rgba(233,69,96,0.7));
+}
+
+button.small {
+  padding: 5px 10px;
+  font-size: 11px;
+  border-radius: 6px;
+}
+
+.history-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+</style>
+
+<div id="app">
+  <div class="header">
+  <div class="header-left">
+    <img src="assets/icone_sev.png" alt="Sorteio" />
+  </div>
+
+  <div class="header-center">
+    <h1>
+      🏁 Sorteio
+    </h1>
+    <p>Registre participantes e inicie o sorteio</p>
+  </div>
+
+  <div style="flex: 1; display:flex; justify-content:flex-end;">
+    <button class="history-fab" onclick="toggleHistory()">
+      📜
+    </button>
+  </div>
+
+  <div class="header-right"></div>
+</div>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="panel-title">➕ Registrar Participante</div>
+      <div class="form-group">
+        <label>Nome</label>
+        <input type="text" id="input-name" placeholder="Nome completo" maxlength="32" />
+      </div>
+      <div class="form-group">
+        <label>Quantidade de Cupons</label>
+        <input type="number" id="input-coupons" value="1" placeholder="Ex: 3" min="1" max="100" />
+      </div>
+      <div id="error-msg"></div>
+      <button class="btn-add" onclick="addParticipant()">Registrar</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">👥 Participantes</div>
+      <div class="participants-list" id="list">
+        <div class="empty-state">Nenhum participante ainda</div>
+      </div>
+      <div class="total-coupons" id="total-info" style="display:none">
+        Total de cupons: <span id="total-count">0</span>
+      </div>
+    </div>
+
+      <div class="raffle-section">
+        <button class="btn-raffle" id="btn-raffle" onclick="startRaffle()" disabled>
+          🎲 Iniciar Sorteio
+        </button>
+      </div>
+  </div>
+
+  <!-- Roulette overlay -->
+  <div id="roulette-overlay">
+    <div class="roulette-title">Sorteando...</div>
+    <div class="roulette-window">
+      <div class="roulette-highlight"></div>
+      <div id="roulette-list"></div>
+    </div>
+  </div>
+
+  <!-- Winner screen -->
+  <div id="winner-screen">
+    <button class="btn-music" onclick="stopMusic()" id="btn-music-off">
+      🔊
+    </button>
+    <button class="btn-music" style="display: none;" onclick="continueMusic()" id="btn-music-on">
+      🔇
+    </button>
+    <div class="confetti-container" id="confetti"></div>
+    <div class="trophy">🏆</div>
+    <div class="winner-label">Parabéns ao vencedor</div>
+    <div class="winner-name" id="winner-name"></div>
+    <div class="winner-coupons" id="winner-coupons"></div>
+    <button class="btn-reset" onclick="resetAll()">Finalizar</button>
+  </div>
+</div>
+
+<div id="history-modal">
+  <div class="confirm-box history-box">
+    <div class="confirm-title">📜 Histórico de Sorteios</div>
+
+    <div id="history-list"></div>
+
+    <div class="history-footer">
+      <div id="history-pagination"></div>
+
+      <div class="history-actions">
+        <button class="btn-confirm" onclick="confirmClearHistory()">Limpar</button>
+        <button class="btn-cancel" onclick="toggleHistory()">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-title">Confirmar</div>
+    <div class="confirm-text" id="confirm-text"></div>
+
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="closeConfirm(false)">Cancelar</button>
+      <button class="btn-confirm" onclick="closeConfirm(true)">Remover</button>
+    </div>
+  </div>
+</div>
+
+<script src="playlist.js"></script>
+
+<script>
+  let participants = [];
+  let raffleSound = new Audio();
+  let playlist = window.PLAYLIST.songs;
+  let historyPage = 1;
+  let raffleHistoryItem = 'raffleHistory';
+  const HISTORY_PER_PAGE = 5;
+  const HISTORY_RETENTION_MONTHS = 6;
+
+  const couponsEl = document.getElementById('input-coupons');
+  couponsEl.addEventListener('focus', function () {
+    if (this.value === '1') {
+      this.select();
+    }
+  });
+
+  function addParticipant() {
+    const nameEl = document.getElementById('input-name');
+    const couponsEl = document.getElementById('input-coupons');
+    const errEl = document.getElementById('error-msg');
+    const name = nameEl.value.trim();
+    const coupons = parseInt(couponsEl.value);
+
+    errEl.textContent = '';
+
+    if (!name) { errEl.textContent = 'Informe o nome do participante.'; return; }
+    if (!coupons || coupons < 1) { errEl.textContent = 'Informe ao menos 1 cupom.'; return; }
+    if (participants.find(p => p.name.toLowerCase() === name.toLowerCase())) {
+      errEl.textContent = 'Participante já registrado.'; return;
+    }
+
+    participants.push({ name, coupons, id: Date.now() });
+    nameEl.value = '';
+    couponsEl.value = 1;
+    nameEl.focus();
+    renderList();
+  }
+
+  function removeParticipant(id) {
+    let participant = participants.find(p => p.id === id);
+    showConfirm(`Tem certeza que deseja remover ${participant.name} do sorteio?`, (ok) => {
+      if (ok) {
+        participants = participants.filter(p => p.id !== id);
+        renderList();
+      }
+    });
+  }
+
+  function renderList() {
+    const list = document.getElementById('list');
+    const totalInfo = document.getElementById('total-info');
+    const totalCount = document.getElementById('total-count');
+    const btn = document.getElementById('btn-raffle');
+
+    if (participants.length === 0) {
+      list.innerHTML = '<div class="empty-state">Nenhum participante ainda</div>';
+      totalInfo.style.display = 'none';
+      btn.disabled = true;
+      return;
+    }
+
+    list.innerHTML = participants.map(p => `
+      <div class="participant-item">
+        <span class="p-name">${p.name}</span>
+        <div class="right">
+          <span class="p-coupons">🎟 ${p.coupons}</span>
+          <button class="p-remove" onclick="removeParticipant(${p.id})" title="Remover">×</button>
+        </div>
+      </div>
+    `).join('');
+
+    const total = participants.reduce((s, p) => s + p.coupons, 0);
+    totalCount.textContent = total;
+    totalInfo.style.display = 'block';
+    btn.disabled = participants.length < 2;
+  }
+
+  function buildPool() {
+      const pool = [];
+      participants.forEach(p => {
+          for (let i = 0; i < p.coupons; i++) pool.push(p);
+      });
+
+      // Embaralhando a lista de participantes antes de iniciar a roleta
+      for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [pool[i], pool[j]] = [pool[j], pool[i]]; // Troca os elementos aleatoriamente
+      }
+
+      return pool;
+  }
+
+  function loadSound() {
+    if (!playlist.length) {
+      console.warn('Playlist vazia ou não carregada.');
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * playlist.length);
+    const selected = playlist[randomIndex];
+
+    raffleSound = new Audio("audio/" + selected.file);
+    raffleSound.loop = true;
+
+    raffleSound.addEventListener('loadedmetadata', () => {
+      raffleSound.currentTime = selected.start || 0;
+      raffleSound.play();
+    });
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  function getWinnerIndex(size)
+  {
+      return size - 4;
+  }
+
+  function fillNames(shuffled, winner, size = 250) {
+    if (!shuffled.length) return names;
+
+    const names = [];
+    let pool = [...shuffled];
+    const winnerIndex = getWinnerIndex(size);
+
+    if (participants.length === 2 && names.length === 0)
+    {
+      names.push(winner.name);
+    }
+
+    while (names.length < size) {
+      // if we exhausted the pool then reshuffle and restart
+      if (pool.length === 0) {
+        pool = [...shuffled];
+        shuffle(pool);
+      }
+
+      if (names.length === winnerIndex) {
+        names.push(winner.name);
+        continue;
+      }
+      
+      const item = pool.pop();
+      let differsFromPrevious = names.length === 0 || names[names.length - 1] !== item.name;
+      let isNextWinner = names.length + 1 === winnerIndex && item.name === winner.name
+
+      // prevent consecutive duplicates
+      if (differsFromPrevious && !isNextWinner) {
+          names.push(item.name);
+      }
+    }
+
+    return names;
+  }
+
+  function ensureEmptyRegistrationFields()
+  {
+    const nameEl = document.getElementById('input-name');
+    const errEl = document.getElementById('error-msg');
+
+    if (nameEl.value.trim() !== '') {
+      errEl.textContent = 'Adicione ou limpe o participante antes de iniciar o sorteio.';
+      nameEl.focus();
+      return true;
+    }
+
+    errEl.textContent = '';
+    return false;
+  }
+
+  function chooseWinner(pool)
+  {
+    let seed = Math.random();
+    let calculationResult = seed * pool.length;
+    let randomIndex = Math.floor(calculationResult);
+    let winner = pool[randomIndex];
+
+    return winner;
+  }
+
+  function startRaffle() {
+    if (ensureEmptyRegistrationFields())
+    {
+      return;
+    }
+
+    cleanOldHistory();
+    loadSound();
+
+    const pool = buildPool();
+
+    const winner = chooseWinner(pool); 
+
+    const rouletteSize = 250;
+    const duration = 35000;
+    const startTime = performance.now();
+
+    const names = fillNames(pool, winner, rouletteSize);
+
+    const overlay = document.getElementById('roulette-overlay');
+    const rList = document.getElementById('roulette-list');
+    overlay.classList.add('active');
+
+    const ITEM_H = 54;
+    rList.innerHTML = names.map(n => `<div class="roulette-item">${n}</div>`).join('');
+
+    //const totalH = names.length * ITEM_H;
+    const windowH = 400;
+    const centerOffset = (windowH / 2) - (ITEM_H / 2);
+    const targetIndex = getWinnerIndex(rouletteSize);
+    const targetY = -(targetIndex * ITEM_H - centerOffset);
+
+    let startY = centerOffset;
+    rList.style.transform = `translateY(${startY}px)`;
+
+    let raf;
+
+    function easeInOutSine(t) {
+      return -(Math.cos(Math.PI * t) - 1) / 2;
+    }
+
+    function animate(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const eased = easeInOutSine(t);
+
+        const currentY = startY + (targetY - startY) * eased;
+        rList.style.transform = `translateY(${currentY}px)`;
+
+        const centerItemIndex = Math.round((-currentY + centerOffset) / ITEM_H);
+        document.querySelectorAll('.roulette-item').forEach((el, i) => {
+            el.classList.toggle('center', i === centerItemIndex);
+        });
+
+        if (t < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            cancelAnimationFrame(raf);
+
+            // Aqui decidimos o vencedor baseado no item central da roleta
+            const centerItemIndex = Math.round((-currentY + centerOffset) / ITEM_H);
+            const winnerName = names[centerItemIndex];
+
+            // Encontramos o participante correspondente
+            const winner = participants.find(p => p.name === winnerName);
+
+            setTimeout(() => showWinner(winner, overlay), 2000);
+        }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  function fadeOutAndPause(audio, duration = 1000) {
+    const steps = 20;
+    const stepTime = duration / steps;
+    const stepAmount = audio.volume / steps;
+
+    const fade = setInterval(() => {
+      if (audio.volume > stepAmount) {
+        audio.volume = Math.max(0, audio.volume - stepAmount);
+      } else {
+        audio.volume = 0;
+        audio.pause();
+        clearInterval(fade);
+      }
+    }, stepTime);
+  }
+
+  function stopMusic(fade = 800)
+  {
+    fadeOutAndPause(raffleSound, fade);
+    document.getElementById("btn-music-off").style.display = "none";
+    document.getElementById("btn-music-on").style.display = "block";
+  }
+
+  function continueMusic()
+  {
+    raffleSound.volume = 1; // reset volume
+    raffleSound.play();
+    document.getElementById("btn-music-off").style.display = "block";
+    document.getElementById("btn-music-on").style.display = "none";
+  }
+
+  function showWinner(winner, overlay) {
+    const snapshot = participants.map(p => ({ ...p }));
+    saveResult(winner, snapshot);
+
+    overlay.classList.remove('active');
+
+    const ws = document.getElementById('winner-screen');
+    document.getElementById('winner-name').textContent = winner.name;
+    document.getElementById('winner-coupons').innerHTML = `Sorteado com <strong>${winner.coupons} cupom${winner.coupons > 1 ? 's' : ''}</strong> de um total de <strong>${buildPool().length} cupons</strong>`;
+    ws.classList.add('active');
+
+    spawnConfetti();
+
+    participants = [];
+    renderList();
+  }
+
+  function saveResult(winner, participantsSnapshot) {
+    const history = JSON.parse(localStorage.getItem(raffleHistoryItem) || '[]');
+
+    history.push({
+      winner: {
+        name: winner.name,
+        coupons: winner.coupons
+      },
+      totalCoupons: participantsSnapshot.reduce((s, p) => s + p.coupons, 0),
+      participants: participantsSnapshot, 
+      date: new Date().toISOString()
+    });
+
+    localStorage.setItem(raffleHistoryItem, JSON.stringify(history));
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('history-list');
+    const history = JSON.parse(localStorage.getItem(raffleHistoryItem) || '[]');
+
+    if (!history.length) {
+      list.innerHTML = '<div class="empty-state">Nenhum sorteio ainda</div>';
+      renderPaginationControls(0);
+      return;
+    }
+
+    const reversed = history.slice().reverse();
+
+    const totalPages = Math.ceil(reversed.length / HISTORY_PER_PAGE) || 0;
+
+    renderPaginationControls(totalPages);
+
+    if (!reversed.length) {
+      list.innerHTML = '<div class="empty-state">Nenhum sorteio ainda</div>';
+      document.getElementById('history-pagination').style.display = 'none';
+      return;
+    }
+
+    const start = (historyPage - 1) * HISTORY_PER_PAGE;
+    const pageItems = reversed.slice(start, start + HISTORY_PER_PAGE);
+
+    list.innerHTML = pageItems.map(item => {
+    const historyDate = new Date(item.date);
+
+    const date = historyDate.toLocaleDateString('en-GB', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    const time = historyDate.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+
+    const participantsHTML = item.participants
+      .map(p => `• ${p.name} (${p.coupons})`)
+      .join('<br>');
+
+    const showToggle = item.participants.length > 4;
+
+    return `
+      <div class="history-item">
+        
+        <div class="history-left">
+          <strong title="${item.winner.name}">🏆 ${item.winner.name}</strong><br>
+          <span style="color:#FFD580" title="Venceu com ${item.winner.coupons} cupons">🎟 Venceu com ${item.winner.coupons} cupons</span><br>
+          📊 Total: ${item.totalCoupons} cupons<br>
+          🕒 ${date} ${time}
+        </div>
+
+        <div class="history-right">
+          <div class="participants-collapsed ${showToggle ? '' : 'expanded'}">
+            ${participantsHTML}
+          </div>
+
+          ${showToggle ? `
+            <button class="toggle-participants" onclick="toggleParticipants(this)">
+              Ver mais
+            </button>
+          ` : ''}
+        </div>
+
+      </div>
+    `;
+    }).join('');
+  }
+
+  function renderPaginationControls(totalPages) {
+    const controls = document.getElementById('history-pagination');
+
+    if (!totalPages || totalPages <= 1) {
+      controls.innerHTML = '';
+      controls.style.display = 'none';
+      return;
+    }
+
+    controls.style.display = 'flex';
+
+    controls.innerHTML = `
+      <button onclick="changePage(-1)" ${historyPage === 1 ? 'disabled' : ''}>◀</button>
+      <span>Página ${historyPage} / ${totalPages}</span>
+      <button onclick="changePage(1)" ${historyPage === totalPages ? 'disabled' : ''}>▶</button>
+    `;
+  }
+
+  function changePage(delta) {
+    historyPage += delta;
+    renderHistory();
+  }
+
+  function toggleHistory() {
+    const modal = document.getElementById('history-modal');
+    modal.classList.toggle('active');
+
+    if (modal.classList.contains('active')) {
+      historyPage = 1; // always start at first page
+      renderHistory();
+    }
+  }
+
+  function confirmClearHistory() {
+    showConfirm('Deseja realmente apagar todo o histórico de sorteios?', (ok) => {
+      if (ok) {
+        clearHistory();
+      }
+    });
+  }
+
+  function clearHistory() {
+    localStorage.removeItem(raffleHistoryItem);
+    historyPage = 1;
+    renderHistory();
+  }
+
+  function cleanOldHistory() {
+    const history = JSON.parse(localStorage.getItem(raffleHistoryItem) || '[]');
+
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - HISTORY_RETENTION_MONTHS);
+    //sixMonthsAgo.setMinutes(sixMonthsAgo.getMinutes() - 1);
+
+    const filtered = history.filter(item => {
+      return new Date(item.date) >= sixMonthsAgo;
+    });
+
+    localStorage.setItem(raffleHistoryItem, JSON.stringify(filtered));
+  }
+
+  function spawnConfetti() {
+    const container = document.getElementById('confetti');
+    container.innerHTML = '';
+
+    const colors = ['#F5A623','#FFD580','#e94560','#2ecc71','#3498db','#9b59b6','#ffffff'];
+
+    let count = 0;
+    const maxPieces = 400;
+
+    const interval = setInterval(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+
+      el.style.cssText = `
+        left: ${Math.random() * 100}%;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        width: ${6 + Math.random() * 8}px;
+        height: ${6 + Math.random() * 8}px;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+        animation-duration: ${4 + Math.random() * 4}s;
+      `;
+
+      container.appendChild(el);
+
+      count++;
+      if (count >= maxPieces) clearInterval(interval);
+    }, 30);
+  } 
+
+  function resetAll() {
+    document.getElementById('winner-screen').classList.remove('active');
+    document.getElementById('roulette-overlay').classList.remove('active');
+
+    stopMusic();
+  }
+
+  document.getElementById('input-name').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('input-coupons').focus();
+  });
+
+  document.getElementById('input-coupons').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addParticipant();
+  });
+
+  let confirmCallback = null;
+
+  function showConfirm(message, callback) {
+    document.getElementById('confirm-text').textContent = message;
+    document.getElementById('confirm-modal').classList.add('active');
+    confirmCallback = callback;
+  }
+
+  function closeConfirm(result) {
+    document.getElementById('confirm-modal').classList.remove('active');
+    if (confirmCallback) confirmCallback(result);
+  }
+
+  function toggleParticipants(btn) {
+    const container = btn.previousElementSibling;
+
+    container.classList.toggle('expanded');
+
+    if (container.classList.contains('expanded')) {
+      btn.textContent = 'Ver menos';
+    } else {
+      btn.textContent = 'Ver mais';
+    }
+  }
+</script>
